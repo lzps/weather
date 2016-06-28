@@ -21,4 +21,11 @@ else:
         f.write(";".join(api)+"\n"+input("请输入纬度经度（示例：39.93,116.40）："))
     exit("\n配置已存至./config，请检查后重新运行。")
 
-
+for a in k:
+    a = a.split(":")
+    if a[1]:
+        exec("from {0} import {0}".format(a[0]))
+        exec("t = {0}('{1}', '{2}')".format(a[0], a[1], c[0]))
+        t.now()
+        pprint(t.infoN)
+        print(a[0] + "\n")

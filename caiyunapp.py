@@ -19,7 +19,7 @@ Skycons={
     "FOG": "雾",
     "HAZE": "霾"}
 
-class caiyun(object):
+class caiyunapp(object):
     '''API说明：http://wiki.swarma.net/index.php/%E5%BD%A9%E4%BA%91%E5%A4%A9%E6%B0%94API/v2'''
     def __init__(self, key, location):
         '''key即https://www.caiyunapp.com/dev_center/login.html 登录后的API密钥
