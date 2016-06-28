@@ -3,6 +3,8 @@
 
 __author__ = 'L'
 
+import requests
+
 '''d={
     0:["晴","Sunny"],
     1:["晴","Clear"],
@@ -46,11 +48,11 @@ __author__ = 'L'
     99:["未知","Unknown","未知"]
 }#d[int(now['now']['code'])'''
 
-class tp(object):
+class thinkpage(object):
     '''API说明：http://www.thinkpage.cn/doc'''
     def __init__(self, key, location):
-        '''key即http://www.thinkpage.cn/account中账号资料的API密钥
-        location即经纬度，注意纬度在前经度在后'''
+        '''key即http://www.thinkpage.cn/account 中账号资料的API密钥
+        location即经纬度，注意纬度在前经度在后 e.g.:"39.93,116.40"'''
         self.key = key
         self.loc = location
     
@@ -65,8 +67,7 @@ class tp(object):
 
 
 if __name__=='__main__':
-    import requests
     from pprint import pprint
-    t = tp(input('请输入key：'), input('请输入经纬度 例如：location=39.93,116.40 （注意纬度在前经度在后）'))
+    t = thinkpage(input('请输入key：'), input('请输入经纬度 例如：location=39.93,116.40 （注意纬度在前经度在后）'))
     t.now()
     pprint(t.infoN)
