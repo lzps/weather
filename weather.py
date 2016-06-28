@@ -3,7 +3,7 @@
 #bug:cn文件有bug；初次使用多了一次请求
 #To do:多城市；ip检测城市；wego
 
-import json,requests,os
+import requests,os
 from pprint import pprint
 
 '''
@@ -36,7 +36,7 @@ else:
         f = eval(f.read().decode('utf-8'))
     city = input('请输入城市拼音：')
     if city in f:
-        a = json.loads(requests.get('https://api.heweather.com/x3/weather?city={c}&key={k}'.format(c=city,k=k[1])).text)['HeWeather data service 3.0'][0]
+        a = requests.get('https://api.heweather.com/x3/weather?city={c}&key={k}'.format(c=city,k=k[1])).json()['HeWeather data service 3.0'][0]
         with open('city','w') as f:
             f.write(city+','+a['basic']['lat']+','+a['basic']['lon'])
     else:
@@ -49,10 +49,10 @@ else:
         print('\n请重新输入！')
         exit(input('Press any key to exit . . .'))
 
-pprint(json.loads(requests.get('https://api.heweather.com/x3/weather?city={c}&key={k}'.format(c=c[0],k=k[1])).text)['HeWeather data service 3.0'][0])
+pprint(requests.get('https://api.heweather.com/x3/weather?city={c}&key={k}'.format(c=c[0],k=k[1])).json()['HeWeather data service 3.0'][0])
 
 if eval(k[0]):
-	a=json.loads(requests.get('https://api.forecast.io/forecast/{k}/{c1},{c2}?lang=zh'.format(k=k[2],c1=c[1],c2=c[2])).text)
+	a=requests.get('https://api.forecast.io/forecast/{k}/{c1},{c2}?lang=zh'.format(k=k[2],c1=c[1],c2=c[2])).json()
 	pprint(a)
 	while True:
 		eval(input(''))
