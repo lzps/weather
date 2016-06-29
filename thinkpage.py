@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+import requests
 __author__ = 'L'
 
-import requests
 
 '''d={
     0:["晴","Sunny"],
@@ -41,33 +40,37 @@ import requests
     32:["风","Windy"],
     33:["大风","Blustery"],
     34:["飓风","Hurricane"],
-    35:[" 热带风暴","Tropical Storm"],
+    35:["热带风暴","Tropical Storm"],
     36:["龙卷风","Tornado"],
     37:["冷","Cold"],
     38:["热","Hot"],
     99:["未知","Unknown","未知"]
-}#d[int(now['now']['code'])'''
+}#infon[int(now['now']['code'])'''
+
 
 class thinkpage(object):
-    '''API说明：http://www.thinkpage.cn/doc'''
+    """API说明：http://www.thinkpage.cn/doc/v2"""
+
     def __init__(self, key, location):
-        '''key即http://www.thinkpage.cn/account 中账号资料的API密钥
-        location即经纬度，注意纬度在前经度在后 e.g.:"39.93,116.40"'''
+        """key即http://www.thinkpage.cn/account 中账号资料的API密钥
+        location即经纬度，注意纬度在前经度在后 e.g.:"39.93,116.40\""""
         self.key = key
-        self.loc = location
-    
+        self.loc = location.replace(',', ':')
+        self.dnow = requests.get('https://api.thinkpage.cn/v2/weather/now.json?key={0}&city={1}'.format(self.key, self.loc)).json()
+
     def now(self):
-        '''获取天气实况至infoN'''
-        now = requests.get('https://api.thinkpage.cn/v3/weather/now.json?key={k}&location={loc}'.format(k = self.key, loc = self.loc.replace(',',':'))).json()['results'][0]
-        infon = {}
-        infon['last_update'] = '数据更新时间（该城市的本地时间）：' + now['last_update']
-        infon['weather'] = now['location']['name'] + '天气概况：' + now['now']['text']
-        infon['temperature'] = '摄氏温度：' + now['now']['temperature']
-        self.infoN = infon
+        """以字典形式返回实时天气状况"""
+        t = str(self.dnow['weather'][0])
+        a = ['last_update', 'temperature', 'city_name', 'now', 'air_quality', 'feels_like', 'humidity', 'visibility', 'wind_direction', 'wind_scale', 'wind_speed', 'wind_direction_degree', 'pressure', '_rising', 'text']
+        b = ['数据更新时间（该城市的本地时间）', '摄氏温度', '城市名', '实况', '空气质量', '体感温度', '相对湿度', '能见度', '风向', '风力等级', '风速', '风向角度', '气压', '升高', '天气现象']
+        for i in range(0, len(a)):
+            t = t.replace(a[i], b[i])
+        infon = eval(t)
+        del(infon['city_id'], infon['实况']['code'])
+        return infon
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     from pprint import pprint
     t = thinkpage(input('请输入key：'), input('请输入经纬度 例如：location=39.93,116.40 （注意纬度在前经度在后）'))
-    t.now()
-    pprint(t.infoN)
+    pprint(t.now())
