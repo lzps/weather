@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import requests
+from re import sub
 from time import ctime
+import requests
 __author__ = 'L'
 
 
@@ -35,8 +36,7 @@ class caiyunapp(object):
     def now(self):
         """以字典形式返回实时天气状况"""
         t = str(self.dnow['result'])
-        t = t.replace(", 'status': 'ok'", "")
-        t = t.replace("'status': 'ok', ", "")
+        t = sub(r"'status.*?,", '', t)
         a = ['cloudrate', 'humidity', 'precipitation', 'skycon', 'wind', 'aqi', 'temperature', 'local', 'datasource', 'nearest', 'intensity', 'direction', 'speed', 'distance']
         b = ['云量', '相对湿度', '降水', '天气概况', '风', '空气质量指数', '温度', '本地的', '数据源', '最近的降水带', '强度', '风向', '风速', '距离']
         for i in range(0, len(a)):
@@ -46,8 +46,22 @@ class caiyunapp(object):
         infon['天气概况'] = Skycons[infon['天气概况']]
         return infon
 
+    def daily(self):
+        """以字典形式返回天级别的预报状况"""
+        t = str(self.data['result']['daily'])
+        t = sub(r"'status.*?,", '', t)
+        a = ['avg', 'date', 'datetime', 'time', 'max', 'min', 'astro', 'sunrise', 'sunset', 'desc', 'index', 'carWashing', 'cloudrate', 'coldRisk', 'dressing', 'humidity', 'precipitation', 'temperature', 'ultraviolet', 'wind', 'direction', 'speed']
+        b = ['平均', '日期', '日期', '时间', '最高', '最低', '日出日落', '日出时间', '日落时间', '介绍', '指数', '洗车指数', '云量', '感冒风险', '着装指数', '相对湿度', '降雨强度', '温度', '紫外线', '风况', '风向', '风力']
+        for i in range(0, len(a)):
+            t = t.replace(a[i], b[i])
+        infon = eval(t)
+        return infon
+
 
 if __name__ == '__main__':
     from pprint import pprint
     t = caiyunapp(input('请输入key：'), input('请输入经纬度 例如：location=39.93,116.40 （注意纬度在前经度在后）'))
-    pprint(t.now())
+    print(t.dnow)
+    print(t.data)
+    while True:
+        eval(input())
