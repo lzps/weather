@@ -53,19 +53,23 @@ class thinkpage(object):
     """API说明：http://www.thinkpage.cn/doc/v2"""
 
     def __init__(self, key, location):
-        """key即http://www.thinkpage.cn/account 中账号资料的API密钥
+        """key 即 http://www.thinkpage.cn/account 中账号资料的API密钥
         location即经纬度，注意纬度在前经度在后 e.g.:"39.93,116.40\""""
         self.key = key
         self.loc = location.replace(',', ':')
-        self.dnow = requests.get('https://api.thinkpage.cn/v2/weather/now.json?key={0}&city={1}'.format(self.key, self.loc)).json()
-        self.data = requests.get('https://api.thinkpage.cn/v2/weather/future.json?key={0}&city={1}'.format(self.key, self.loc)).json()
+        self.dnow = requests.get(
+            'https://api.thinkpage.cn/v2/weather/now.json?key={0}&city={1}'.format(self.key, self.loc)).json()
+        self.data = requests.get(
+            'https://api.thinkpage.cn/v2/weather/future.json?key={0}&city={1}'.format(self.key, self.loc)).json()
         # 可合并请求 all.json
 
     def now(self):
         """以字典形式返回实时天气状况"""
         t = str(self.dnow['weather'][0])
-        a = ['last_update', 'temperature', 'city_name', 'now', 'air_quality', 'feels_like', 'humidity', 'visibility', 'wind_direction', 'wind_scale', 'wind_speed', 'wind_direction_degree', 'pressure', '_rising', 'text']
-        b = ['数据更新时间（该城市的本地时间）', '摄氏温度', '城市名', '实况', '空气质量', '体感温度', '相对湿度', '能见度', '风向', '风力等级', '风速', '风向角度', '气压', '升高', '天气现象']
+        a = ['last_update', 'temperature', 'city_name', 'now', 'air_quality', 'feels_like', 'humidity', 'visibility',
+             'wind_direction', 'wind_scale', 'wind_speed', 'wind_direction_degree', 'pressure', '_rising', 'text']
+        b = ['数据更新时间（该城市的本地时间）', '摄氏温度', '城市名', '实况', '空气质量', '体感温度',
+             '相对湿度', '能见度', '风向', '风力等级', '风速', '风向角度', '气压', '升高', '天气现象']
         for i in range(0, len(a)):
             t = t.replace(a[i], b[i])
         infon = eval(t)
@@ -77,17 +81,21 @@ class thinkpage(object):
         t = str(self.data['weather'][0])
         t = sub(r"'code1.*?,", '', t)
         t = sub(r"'code2.*?,", '', t)
-        a = ['last_update', 'city_name', 'future', 'date', 'text', 'high', 'low', 'wind', 'cop']
-        b = ['数据更新时间（该城市的本地时间）', '城市名', '预报', '日期', '现象', '最高温度', '最低温度', '风况', '降水概率']
+        a = ['last_update', 'city_name', 'future',
+             'date', 'text', 'high', 'low', 'wind', 'cop']
+        b = ['数据更新时间（该城市的本地时间）', '城市名', '预报', '日期',
+             '现象', '最高温度', '最低温度', '风况', '降水概率']
         for i in range(0, len(a)):
             t = t.replace(a[i], b[i])
         infon = eval(t)
         del(infon['city_id'])
         return infon
 
+
 if __name__ == '__main__':
     from pprint import pprint
-    t = thinkpage(input('请输入key：'), input('请输入经纬度 例如：location=39.93,116.40 （注意纬度在前经度在后）'))
+    t = thinkpage(input('请输入key：'), input(
+        '请输入经纬度 例如：location=39.93,116.40 （注意纬度在前经度在后）'))
     print(t.dnow)
     print(t.data)
     while True:
