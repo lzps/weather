@@ -49,7 +49,7 @@ __author__ = 'L'
 }#infon[int(now['now']['code'])'''
 
 
-class thinkpage(object):
+class Thinkpage(object):
     """API说明：http://www.thinkpage.cn/doc/v2"""
 
     def __init__(self, key, location):
@@ -94,7 +94,7 @@ class thinkpage(object):
 
 if __name__ == '__main__':
     from pprint import pprint
-    t = thinkpage(input('请输入key：'), input(
+    t = Thinkpage(input('请输入key：'), input(
         '请输入经纬度 例如：location=39.93,116.40 （注意纬度在前经度在后）'))
     print(t.dnow)
     print(t.data)

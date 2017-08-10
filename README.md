@@ -5,20 +5,21 @@
 
 首次运行将提示输入API KEY与经纬度
 
-# Demo
-```
-$ python3 ./main.py
+## Demo
+
+``` bash
+$ python3 main.py
 未检测到配置，请输入
+1.输入 API Key(可留空，留空则跳过获取)
+ -请输入 Caiyunapp 的 API Key：xxx
+ -请输入 Thinkpage 的 API Key：xxx
+2.输入城市信息，必填 可参考 https://www.ipip.net/ip.html
+ -请输入纬度经度（示例：39.93,116.40）：39.93,116.40
 
-1.输入API Key(可留空，留空则跳过获取)
-请输入https://www.caiyunapp.com/dev_center/login.html 的API Key：xxx
-请输入https://www.thinkpage.cn/doc 的API密钥：xxx
+配置已存至./main.ini，请检查后重新运行。
 
-2.输入城市信息，以下必填 可参考http://www.ipip.net/ip.html
-请输入纬度经度（示例：39.93,116.40）：39.93,116.40
-配置已存至./config，请检查后重新运行。
 
-$ python3 ./main.py
+$ python3 main.py
 {'pm25': 80.0,
  '云量': 0.01,
  '天气概况': '晴天',
@@ -119,7 +120,7 @@ $ python3 ./main.py
          '日期': '2017-05-31',
          '最低': {'风力': 1.16, '风向': 130.35},
          '最高': {'风力': 17.5, '风向': 197.67}}]}
-caiyunapp
+Caiyunapp
 
 {'城市名': '北京',
  '实况': {'体感温度': '29',
@@ -157,19 +158,12 @@ caiyunapp
          '现象': '阴/阵雨',
          '降水概率': '',
          '风况': '东风3级'}]}
-thinkpage
+Thinkpage
 
 ```
 
+## 注意
 
-# 需求
-安装python3，pip安装requests
+使用 python3 运行，pip3 安装 requests
 
-## ubuntu 16.04 LTS
-```
-sudo apt-get install python3
-sudo pip3 install requests
-git clone https://github.com/lzps/weather.git
-cd weather/
-python3 ./main.py
-```
+## lib 说明

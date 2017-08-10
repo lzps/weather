@@ -20,7 +20,7 @@ Skycons = {
     "HAZE": "霾"}
 
 
-class caiyunapp(object):
+class Caiyunapp(object):
     """API说明：http://wiki.swarma.net/index.php/彩云天气API/v2"""
 
     def __init__(self, key, location):
@@ -64,7 +64,7 @@ class caiyunapp(object):
 
 if __name__ == '__main__':
     from pprint import pprint
-    t = caiyunapp(input('请输入key：'), input(
+    t = Caiyunapp(input('请输入key：'), input(
         '请输入经纬度 例如：location=39.93,116.40 （注意纬度在前经度在后）'))
     print(t.dnow)
     print(t.data)
