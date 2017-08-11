@@ -5,7 +5,7 @@ from time import strftime
 import requests
 __author__ = 'L'
 
-R = [5, 24, 60]
+R = [5, 12, False]
 Skycons = {
     "CLEAR_DAY": "晴天",
     "CLEAR_NIGHT": "晴夜",
@@ -26,17 +26,16 @@ class Caiyunapp(object):
     def __init__(self, key, location):
         """key 即 https://www.caiyunapp.com/dev_center/login.html 登录后的API密钥
         location即经纬度，注意纬度在前经度在后 e.g.:"39.93,116.40\""""
-        self.key = key
-        self.loc = ",".join(location.split(",")[::-1])
+        loc = ",".join(location.split(",")[::-1])
         self.data = requests.get(
-            'https://api.caiyunapp.com/v2/{0}/{1}/forecast?lang=zh_CN&unit=metric'.format(self.key, self.loc)).json()
+            'https://api.caiyunapp.com/v2/{0}/{1}/forecast?lang=zh_CN&unit=metric'.format(key, loc)).json()
         self.dnow = requests.get(
-            'https://api.caiyunapp.com/v2/{0}/{1}/realtime?lang=zh_CN&unit=metric'.format(self.key, self.loc)).json()
+            'https://api.caiyunapp.com/v2/{0}/{1}/realtime?lang=zh_CN&unit=metric'.format(key, loc)).json()
 
     def now(self):
         """以字符串形式返回实时天气状况"""
         """可添加云量、降水等信息"""
-        temperature = str(self.dnow['result']['temperature']) + '℃'
+        temperature = str(self.dnow['result']['temperature']) + 'ºC'
         aqi = 'AQI：' + str(self.dnow['result']['aqi'])
         humidity = '湿度：' + \
             str(float(self.dnow['result']['humidity'])
@@ -48,13 +47,13 @@ class Caiyunapp(object):
         return '，'.join([update_time, temperature, humidity, aqi, wind])
 
     def daily(self):
-        """以字符串形式返回天级别的预报状况，返回 R[0]+1 天数据"""
+        """以字符串形式返回天级别的预报状况，返回 R[0] 天数据"""
         """可添加云量、AQI、日出日落、风等信息"""
         temp = self.data['result']['daily']['temperature']
         date = [x['date'][5:] for x in temp]
         T_max = [x['max'] for x in temp]
         T_min = [x['min'] for x in temp]
-        temperature = ['{0}-{1}℃'.format(x[0], x[1])
+        temperature = ['{0}-{1}ºC'.format(x[0], x[1])
                        for x in zip(T_min, T_max)]
         skycon = [Skycons[x['value']]
                   for x in self.data['result']['daily']['skycon']]
@@ -77,7 +76,7 @@ def windint2str(direction, speed):
         40, 51), range(51, 62), range(62, 75), range(75, 87), range(87, 103), range(103, 117)]
     S = 12
     for i, x in enumerate(S_R):
-        if int(speed) in x:
+        if int(float(speed)) in x:
             S = i
             break
     D_str = ['北', '东北', '东', '东南', '南', '西南', '西', '西北', '北']
