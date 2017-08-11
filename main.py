@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-；
-'''rem:
-1. 代码需优化
-2. caiyunapp skycon
-'''
-
+# TODO: 缓存，选择性输出
 import os
-from pprint import pprint
 from lib.lib import lib_list
 
 lib_list = lib_list()
@@ -22,7 +17,8 @@ def match(text, name):
 if os.path.exists("main.ini"):
     with open("main.ini", "r") as f:
         f = f.read().replace(' ', '')
-        lib_list, location = match(f, 'lib_list').split(','), match(f, 'location')
+        lib_list, location = match(f, 'lib_list').split(
+            ','), match(f, 'location')
 else:
     print("未检测到配置，请输入")
     print("1.输入 API Key(可留空，留空则跳过获取)")
@@ -42,6 +38,6 @@ else:
 for x in lib_list:
     exec("from lib.{0} import {0}".format(x))
     exec("t = {0}('{1}', '{2}')".format(x, match(f, x), location))
-    pprint(t.now())
-    pprint(t.daily())
+    print(t.now())
+    print(t.daily())
     print(x + "\n")
