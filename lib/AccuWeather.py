@@ -14,18 +14,29 @@ class AccuWeather(object):
     def __init__(self, key, location):
         """key 即 https://developer.accuweather.com/ 注册后的API密钥
         location即经纬度，注意纬度在前经度在后 e.g.:"39.93,116.40\""""
-        base = 'dataservice.accuweather.com'
-        #base = 'api.accuweather.com'
-        location = requests.get(
-            'https://{2}/locations/v1/cities/geoposition/search.json?q={0}&apikey={1}'.format(location, key, base)).json()['Key']
-        self.dnow = requests.get(
-            'https://{2}/currentconditions/v1/{0}.json?apikey={1}&language=zh&details=true&metric=false'.format(location, key, base)).json()[0]
-        self.dD = requests.get(
-            'https://{0}/forecasts/v1/daily/5day/{1}?apikey={2}&details=true&metric=true&language=zh'.format(base, location, key)).json()
+
+        def get(url):
+            req = requests.get(url)
+            if req.status_code == 200:
+                return req
+            elif req.status_code == 401:
+                self.base = 'api.accuweather.com'
+                req = requests.get(url.replace('dataservice', 'api'))
+                if req.status_code == 200:
+                    return req
+            print('请求失败：' + str(req.json()))
+
+        self.base = 'dataservice.accuweather.com'
+        location = get('https://{2}/locations/v1/cities/geoposition/search.json?q={0}&apikey={1}'.format(
+            location, key, self.base)).json()['Key']
+        self.dnow = get('https://{2}/currentconditions/v1/{0}.json?apikey={1}&language=zh&details=true&metric=false'.format(
+            location, key, self.base)).json()[0]
+        self.dD = get('https://{0}/forecasts/v1/daily/5day/{1}?apikey={2}&details=true&metric=true&language=zh'.format(
+            self.base, location, key)).json()
 
     def now(self):
         """以字符串形式返回实时天气状况"""
-        M = lambda x: str(x['Metric']['Value'])
+        def M(x): return str(x['Metric']['Value'])
         temperature = M(self.dnow['Temperature']) + 'ºC' + \
             '(室内体感：{0}ºC)'.format(M(self.dnow['RealFeelTemperatureShade']))
         humidity = '湿度：' + str(self.dnow['RelativeHumidity']) + '%'

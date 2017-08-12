@@ -26,10 +26,17 @@ class Caiyunapp(object):
     def __init__(self, key, location):
         """key 即 https://www.caiyunapp.com/dev_center/login.html 登录后的API密钥
         location即经纬度，注意纬度在前经度在后 e.g.:"39.93,116.40\""""
+
+        def get(url):
+            req = requests.get(url)
+            if req.status_code == 200:
+                return req
+            print('请求失败：' + str(req.json()))
+
         loc = ",".join(location.split(",")[::-1])
-        self.data = requests.get(
+        self.data = get(
             'https://api.caiyunapp.com/v2/{0}/{1}/forecast?lang=zh_CN&unit=metric'.format(key, loc)).json()
-        self.dnow = requests.get(
+        self.dnow = get(
             'https://api.caiyunapp.com/v2/{0}/{1}/realtime?lang=zh_CN&unit=metric'.format(key, loc)).json()
 
     def now(self):

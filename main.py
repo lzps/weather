@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-；
 # TODO: 缓存，选择性输出
 import os
-from lib.lib import lib_list
-
-lib_list = lib_list()
+os.chdir(os.path.split(os.path.realpath(__file__))[0])
 
 
 def match(text, name):
@@ -20,6 +18,8 @@ if os.path.exists("main.ini"):
         lib_list, location = match(f, 'lib_list').split(
             ','), match(f, 'location')
 else:
+    from lib.lib import lib_list
+    lib_list = lib_list()
     print("未检测到配置，请输入")
     print("1.输入 API Key(可留空，留空则跳过获取)")
     api, text = [], []
