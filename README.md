@@ -1,10 +1,12 @@
 # Weather
 
-遵循MIT许可证
-
-这是一个python3的脚本，用于查询天气。使用时直接运行main.py，也可单独运行其它文件调试。
+这是一个python3的脚本，用于查询天气。使用时直接运行main.py。
 
 首次运行将提示输入API KEY与经纬度
+
+注意；请使用 python3 运行，并安装 requests 库
+
+遵循MIT许可证
 
 ## Demo
 
@@ -41,8 +43,8 @@ AccuWeather
 
 ```
 
-## 注意
-
-使用 python3 运行，pip3 安装 requests
-
 ## lib 说明
+
+我使用过四种 API：[AccuWeather](https://developer.accuweather.com/packages)、[彩云天气](https://www.caiyunapp.com/dev_center/regist.html)、[Darksky(原forecast.io)](https://darksky.net/dev)和[心知天气](https://www.seniverse.com/pricing)。
+
+个人感觉 AccuWeather 最好用，可惜免费版访问量限制得厉害，一天只允许 50 次，但数据全面(无地区限制)准确(来源应该是[中国气象局](https://baike.baidu.com/item/华风集团))；彩云天气还好，尤其自家 App 做的不错(卫星图是个亮点)；[Darksky](https://darksky.net/forecast/) 没其他问题，就是不够准，所以移除了；心知天气限制地区，也移除了
